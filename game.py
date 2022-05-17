@@ -107,6 +107,7 @@ def play(gameSocket, playerNo):
     
     myfont = pygame.font.SysFont("monospace", 75)
     while not game_over:
+        SCREEN.fill("black")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -166,7 +167,9 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
-    
+                print_board(board)
+                draw_board(board)
+                
                 turn += 1
                 turn = turn % 2
     
