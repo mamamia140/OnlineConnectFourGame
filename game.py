@@ -138,6 +138,7 @@ def play(gameSocket, playerNo):
                             game_over = True
                             pygame.display.update()
                             pygame.time.wait(3000)
+                            gameSocket.close()
                             main_menu()
 
 
@@ -156,6 +157,7 @@ def play(gameSocket, playerNo):
                             game_over = True
                             pygame.display.update()
                             pygame.time.wait(3000)
+                            gameSocket.close()
                             main_menu()
                 
                 
@@ -179,6 +181,7 @@ def play(gameSocket, playerNo):
                             game_over = True
                             pygame.display.update()
                             pygame.time.wait(3000)
+                            gameSocket.close()
                             main_menu()
                 if(turn==1):
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -202,6 +205,7 @@ def play(gameSocket, playerNo):
                             game_over = True
                             pygame.display.update()
                             pygame.time.wait(3000)
+                            gameSocket.close()
                             main_menu()
 
         clock.tick(60)
