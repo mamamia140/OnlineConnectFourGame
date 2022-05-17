@@ -1,3 +1,4 @@
+from base64 import decode
 import numpy as np
 import pygame
 import sys
@@ -76,6 +77,7 @@ def connectToTheServer(server_ip):
     mysocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     mysocket.connect((server_ip,port))
     print("connection established")
+    return(mysocket)
 
 #initalize pygame
 pygame.init()
@@ -94,7 +96,7 @@ RADIUS = int(SQUARESIZE/2 - 5)
 SCREEN = pygame.display.set_mode(size)
 
 
-def play():
+def play(gameSocket, playerNo):
     board = create_board()
     print_board(board)
     game_over = False
@@ -109,49 +111,59 @@ def play():
             if event.type == pygame.QUIT:
                 sys.exit()
     
-            if event.type == pygame.MOUSEMOTION:
-                pygame.draw.rect(SCREEN, BLACK, (0,0, width, SQUARESIZE))
-                posx = event.pos[0]
-                if turn == 0:
-                    pygame.draw.circle(SCREEN, RED, (posx, int(SQUARESIZE/2)), RADIUS)
-                else: 
-                    pygame.draw.circle(SCREEN, YELLOW, (posx, int(SQUARESIZE/2)), RADIUS)
-            pygame.display.update()
-    
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pygame.draw.rect(SCREEN, BLACK, (0,0, width, SQUARESIZE))
                 #print(event.pos)
                 # Ask for Player 1 Input
-                if turn == 0:
-                    posx = event.pos[0]
-                    col = int(math.floor(posx/SQUARESIZE))
+                if playerNo == 0:
+                    if(turn==0):
+                        posx = event.pos[0]
+                        col = int(math.floor(posx/SQUARESIZE))
     
-                    if is_valid_location(board, col):
-                        row = get_next_open_row(board, col)
-                        drop_piece(board, row, col, 1)
+                        if is_valid_location(board, col):
+                            row = get_next_open_row(board, col)
+                            drop_piece(board, row, col, 1)
+                            coordinate = str(row) +'-'+ str(col)
+                            gameSocket.send(coordinate.encode())
+
     
                         if winning_move(board, 1):
                             label = myfont.render("Player 1 wins!!", 1, RED)
                             SCREEN.blit(label, (40,10))
                             game_over = True
+                    if(turn==1):
+                        coordinate = gameSocket.recv(2048).decode()
+                        coordinate = coordinate.partition("-")
+                        drop_piece(board, coordinate[0], coordinate[2], 1)
+
+
+
+                    
+                    
+
     
     
                 # # Ask for Player 2 Input
-                else:               
-                    posx = event.pos[0]
-                    col = int(math.floor(posx/SQUARESIZE))
+                else:
+                    if(turn==0):
+                        coordinate = gameSocket.recv(2048).decode()
+                        coordinate = coordinate.partition("-")
+                        drop_piece(board, coordinate[0], coordinate[2], 0) 
+                    if(turn==1):
+
+                        posx = event.pos[0]
+                        col = int(math.floor(posx/SQUARESIZE))
     
-                    if is_valid_location(board, col):
-                        row = get_next_open_row(board, col)
-                        drop_piece(board, row, col, 2)
+                        if is_valid_location(board, col):
+                            row = get_next_open_row(board, col)
+                            drop_piece(board, row, col, 2)
+                            coordinate = str(row) +'-'+ str(col)
+                            gameSocket.send(coordinate.encode())
     
                         if winning_move(board, 2):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
-    
-                print_board(board)
-                draw_board(board)
     
                 turn += 1
                 turn = turn % 2
@@ -187,7 +199,7 @@ def createGame():
             c.send('Thank you for connecting'.encode())
     
              #initialize the game
-            play()
+            play(c,0)
             # Close the connection with the client
             c.close()
 
@@ -218,8 +230,8 @@ def joinGame():
                 if event.key == pygame.K_BACKSPACE:
                     user_text = user_text[0:-1]
                 elif event.key == pygame.K_RETURN:
-                    connectToTheServer(user_text)
-                    play()
+                    c = connectToTheServer(user_text)
+                    play(c,1)
                 else:
                     user_text += event.unicode
         
