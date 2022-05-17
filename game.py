@@ -11,7 +11,7 @@ BLACK = (0,0,0)
 RED = (255,0,0)
 YELLOW = (255,255,0)
 WHITE = (255,255,255)
- 
+
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 
@@ -129,6 +129,7 @@ def play(gameSocket, playerNo):
     myfont = pygame.font.SysFont("monospace", 75)
     while not game_over:
         pygame.draw.rect(SCREEN, BLACK, (0,0, width, SQUARESIZE))
+        pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -161,7 +162,7 @@ def play(gameSocket, playerNo):
 
 
                 if(turn==1):
-                    coordinate = gameSocket.recv(8192).decode()
+                    coordinate = gameSocket.recv(4096).decode()
                     coordinate = coordinate.partition("-")
                     drop_piece(board, int(coordinate[0]), int(coordinate[2]), 2)
                     print_board(board)
@@ -185,7 +186,7 @@ def play(gameSocket, playerNo):
             # # Ask for Player 2 Input
             else:
                 if(turn==0):
-                    coordinate = gameSocket.recv(8192).decode()
+                    coordinate = gameSocket.recv(4096).decode()
                     coordinate = coordinate.partition("-")
                     drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
                     print_board(board)
