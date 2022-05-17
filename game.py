@@ -136,6 +136,7 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 1 wins!!", 1, RED)
                             SCREEN.blit(label, (40,10))
                             game_over = True
+                            pygame.display.update()
 
                 if(turn==1):
                     coordinate = gameSocket.recv(8192).decode()
@@ -150,6 +151,7 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
+                            pygame.display.update()
                 
                 
                 
@@ -170,6 +172,7 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 1 wins!!", 1, RED)
                             SCREEN.blit(label, (40,10))
                             game_over = True
+                            pygame.display.update()
                 if(turn==1):
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         posx = event.pos[0]
@@ -190,10 +193,12 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
+                            pygame.display.update()
 
 
             if game_over:
                 pygame.time.wait(3000)
+                main_menu()
         clock.tick(60)
 def createGame():
     s = socket.socket()        
