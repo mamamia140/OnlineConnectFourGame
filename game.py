@@ -124,6 +124,8 @@ def play(gameSocket, playerNo):
                         if is_valid_location(board, col):
                             row = get_next_open_row(board, col)
                             drop_piece(board, row, col, 1)
+                            turn += 1
+                            turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
                             gameSocket.send(coordinate.encode())
 
@@ -137,6 +139,8 @@ def play(gameSocket, playerNo):
                         coordinate = coordinate.partition("-")
                         print(int(coordinate[0]), int(coordinate[2]))
                         drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
+                        turn += 1
+                        turn = turn % 2
 
 
 
@@ -151,7 +155,9 @@ def play(gameSocket, playerNo):
                         coordinate = gameSocket.recv(8192).decode()
                         coordinate = coordinate.partition("-")
                         print(int(coordinate[0]), int(coordinate[2]))
-                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 0) 
+                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 0)
+                        turn += 1
+                        turn = turn % 2
                     if(turn==1):
 
                         posx = event.pos[0]
@@ -160,8 +166,11 @@ def play(gameSocket, playerNo):
                         if is_valid_location(board, col):
                             row = get_next_open_row(board, col)
                             drop_piece(board, row, col, 2)
+                            turn += 1
+                            turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
                             gameSocket.send(coordinate.encode())
+
     
                         if winning_move(board, 2):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
@@ -169,9 +178,6 @@ def play(gameSocket, playerNo):
                             game_over = True
                 print_board(board)
                 draw_board(board)
-                
-                turn += 1
-                turn = turn % 2
     
                 if game_over:
                     pygame.time.wait(3000)
