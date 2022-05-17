@@ -14,6 +14,8 @@ WHITE = (255,255,255)
  
 ROW_COUNT = 6
 COLUMN_COUNT = 7
+
+clock = pygame.time.Clock()
  
 def create_board():
     board = np.zeros((ROW_COUNT,COLUMN_COUNT))
@@ -107,13 +109,12 @@ def play(gameSocket, playerNo):
     
     myfont = pygame.font.SysFont("monospace", 75)
     while not game_over:
-        SCREEN.fill("black")
+        pygame.draw.rect(SCREEN, BLACK, (0,0, width, SQUARESIZE))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
     
             if event.type == pygame.MOUSEBUTTONDOWN:
-                pygame.draw.rect(SCREEN, BLACK, (0,0, width, SQUARESIZE))
                 #print(event.pos)
                 # Ask for Player 1 Input
                 if playerNo == 0:
@@ -134,14 +135,15 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 1 wins!!", 1, RED)
                             SCREEN.blit(label, (40,10))
                             game_over = True
+                    
                     if(turn==1):
                         coordinate = gameSocket.recv(8192).decode()
                         coordinate = coordinate.partition("-")
-                        print(int(coordinate[0]), int(coordinate[2]))
-                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
+                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 2)
                         turn += 1
                         turn = turn % 2
-
+                    print_board(board)
+                    draw_board(board)
 
 
                     
@@ -154,8 +156,7 @@ def play(gameSocket, playerNo):
                     if(turn==0):
                         coordinate = gameSocket.recv(8192).decode()
                         coordinate = coordinate.partition("-")
-                        print(int(coordinate[0]), int(coordinate[2]))
-                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 0)
+                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
                         turn += 1
                         turn = turn % 2
                     if(turn==1):
@@ -176,12 +177,12 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
-                print_board(board)
-                draw_board(board)
-    
+                    print_board(board)
+                    draw_board(board)
+
                 if game_over:
                     pygame.time.wait(3000)
-
+        clock.tick(60)
 def createGame():
     s = socket.socket()        
     print ("Socket successfully created")
@@ -204,6 +205,7 @@ def createGame():
                 pygame.quit()
                 sys.exit()
             c, addr = s.accept()
+            print("someoneconnected")
     
              #initialize the game
             play(c,0)
@@ -231,8 +233,6 @@ def joinGame():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                print("hello")
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
                     user_text = user_text[0:-1]
