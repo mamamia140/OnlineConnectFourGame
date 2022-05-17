@@ -104,6 +104,7 @@ def play(gameSocket, playerNo):
     game_over = False
     turn = 0
     #Calling function draw_board again
+    SCREEN.fill("black")
     draw_board(board)
     pygame.display.update()
     
@@ -125,6 +126,8 @@ def play(gameSocket, playerNo):
                         if is_valid_location(board, col):
                             row = get_next_open_row(board, col)
                             drop_piece(board, row, col, 1)
+                            print_board(board)
+                            draw_board(board)
                             turn += 1
                             turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
@@ -140,10 +143,11 @@ def play(gameSocket, playerNo):
                         coordinate = gameSocket.recv(8192).decode()
                         coordinate = coordinate.partition("-")
                         drop_piece(board, int(coordinate[0]), int(coordinate[2]), 2)
+                        print_board(board)
+                        draw_board(board)
                         turn += 1
                         turn = turn % 2
-                    print_board(board)
-                    draw_board(board)
+                    
 
 
                     
@@ -157,6 +161,8 @@ def play(gameSocket, playerNo):
                         coordinate = gameSocket.recv(8192).decode()
                         coordinate = coordinate.partition("-")
                         drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
+                        print_board(board)
+                        draw_board(board)
                         turn += 1
                         turn = turn % 2
                     if(turn==1):
@@ -167,6 +173,8 @@ def play(gameSocket, playerNo):
                         if is_valid_location(board, col):
                             row = get_next_open_row(board, col)
                             drop_piece(board, row, col, 2)
+                            print_board(board)
+                            draw_board(board)
                             turn += 1
                             turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
@@ -177,8 +185,6 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
-                    print_board(board)
-                    draw_board(board)
 
                 if game_over:
                     pygame.time.wait(3000)
