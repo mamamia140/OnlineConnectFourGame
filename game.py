@@ -132,8 +132,9 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                     if(turn==1):
-                        coordinate = gameSocket.recv(2048).decode()
+                        coordinate = gameSocket.recv(8192).decode()
                         coordinate = coordinate.partition("-")
+                        print(int(coordinate[0]), int(coordinate[2]))
                         drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
 
 
@@ -146,8 +147,9 @@ def play(gameSocket, playerNo):
                 # # Ask for Player 2 Input
                 else:
                     if(turn==0):
-                        coordinate = gameSocket.recv(2048).decode()
+                        coordinate = gameSocket.recv(8192).decode()
                         coordinate = coordinate.partition("-")
+                        print(int(coordinate[0]), int(coordinate[2]))
                         drop_piece(board, int(coordinate[0]), int(coordinate[2]), 0) 
                     if(turn==1):
 
@@ -192,11 +194,7 @@ def createGame():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            c, addr = s.accept()    
-            print ('Got connection from', addr )
-    
-            # send a thank you message to the client. encoding to send byte type.
-            c.send('Thank you for connecting'.encode())
+            c, addr = s.accept()
     
              #initialize the game
             play(c,0)
