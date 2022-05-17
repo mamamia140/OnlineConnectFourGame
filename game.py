@@ -134,7 +134,7 @@ def play(gameSocket, playerNo):
                     if(turn==1):
                         coordinate = gameSocket.recv(2048).decode()
                         coordinate = coordinate.partition("-")
-                        drop_piece(board, coordinate[0], coordinate[2], 1)
+                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
 
 
 
@@ -148,7 +148,7 @@ def play(gameSocket, playerNo):
                     if(turn==0):
                         coordinate = gameSocket.recv(2048).decode()
                         coordinate = coordinate.partition("-")
-                        drop_piece(board, coordinate[0], coordinate[2], 0) 
+                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 0) 
                     if(turn==1):
 
                         posx = event.pos[0]
