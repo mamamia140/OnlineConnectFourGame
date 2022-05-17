@@ -1,5 +1,3 @@
-from http import client
-from chess import WHITE
 import numpy as np
 import pygame
 import sys
@@ -75,8 +73,8 @@ def draw_board(board):
  
 def connectToTheServer(server_ip):
     port=12345
-    socket = socket(socket.AF_INET,socket.SOCK_STREAM)
-    socket.connect((server_ip,port))
+    mysocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    mysocket.connect((server_ip,port))
     print("connection established")
 
 #initalize pygame
