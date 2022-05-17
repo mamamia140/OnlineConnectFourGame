@@ -80,6 +80,20 @@ def connectToTheServer(server_ip):
     mysocket.connect((server_ip,port))
     print("connection established")
     return(mysocket)
+    
+def isValid(server_ip):
+    try:
+        port=12345
+        mysocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        mysocket.connect((server_ip,port))
+        print("valid ip address")
+        mysocket.close()
+        return True
+    
+    except:
+        print("nonvalid ip address")
+        return False
+    
 
 #initalize pygame
 pygame.init()
@@ -263,8 +277,13 @@ def joinGame():
                 if event.key == pygame.K_BACKSPACE:
                     user_text = user_text[0:-1]
                 elif event.key == pygame.K_RETURN:
-                    c = connectToTheServer(user_text)
-                    play(c,1)
+                    if(isValid(user_text)):
+                        c = connectToTheServer(user_text)
+                        print(c)
+                        play(c,1)
+                    else:
+                        message = "Wrong ip address please try again"
+
                 else:
                     user_text += event.unicode
         
