@@ -31,7 +31,7 @@ while True:
   print ('Got connection from', addr )
  
   # send a thank you message to the client. encoding to send byte type.
-  c.send('Thank you for connecting'.encode())
+  c.send('selam çağatay'.encode())
  
   # Close the connection with the client
   c.close()

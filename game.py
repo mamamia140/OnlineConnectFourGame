@@ -1,3 +1,5 @@
+from http import client
+from chess import WHITE
 import numpy as np
 import pygame
 import sys
@@ -9,6 +11,7 @@ BLUE = (0,0,255)
 BLACK = (0,0,0)
 RED = (255,0,0)
 YELLOW = (255,255,0)
+WHITE = (255,255,255)
  
 ROW_COUNT = 6
 COLUMN_COUNT = 7
@@ -70,6 +73,11 @@ def draw_board(board):
                 pygame.draw.circle(SCREEN, YELLOW, (int(c*SQUARESIZE+SQUARESIZE/2), height-int(r*SQUARESIZE+SQUARESIZE/2)), RADIUS)
     pygame.display.update()
  
+def connectToTheServer(server_ip):
+    port=12345
+    socket = socket(socket.AF_INET,socket.SOCK_STREAM)
+    socket.connect((server_ip,port))
+    print("connection established")
 
 #initalize pygame
 pygame.init()
@@ -166,9 +174,9 @@ def createGame():
 
     while True:
         SCREEN.fill("black")
-        MENU_TEXT = pygame.font.SysFont(None, 45).render("Waiting for Other Player...", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(350, 300))
-        SCREEN.blit(MENU_TEXT, MENU_RECT)
+        OUTPUT_TEXT = pygame.font.SysFont(None, 45).render("Waiting for Other Player...", True, "#b68f40")
+        OUTPUT_RECT = OUTPUT_TEXT.get_rect(center=(350, 300))
+        SCREEN.blit(OUTPUT_TEXT, OUTPUT_RECT)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -188,28 +196,38 @@ def createGame():
         pygame.display.update()      
 
 def joinGame():
+    message="Enter an ip address"
+    font = pygame.font.SysFont(None, 30)
+    user_text = ''
+
+    input_rect = pygame.Rect(245,300,180,32)
+    color = pygame.Color('lightskyblue3')
     while True:
-        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+        SCREEN.fill("black")
+        QUESTION_TEXT = pygame.font.SysFont(None, 45).render(message, True, "#b68f40")
+        QUESTION_RECT = QUESTION_TEXT.get_rect(center=(350, 200))
+        SCREEN.blit(QUESTION_TEXT, QUESTION_RECT)
 
-        SCREEN.fill("white")
 
-        OPTIONS_TEXT = pygame.font.SysFont(None, 75).render("This is the OPTIONS SCREEN.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(350, 260))
-        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
-
-        OPTIONS_BACK = Button(image=None, pos=(350, 460), 
-                            text_input="BACK", font=pygame.font.SysFont(None, 75), base_color="Black", hovering_color="Green")
-
-        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-        OPTIONS_BACK.update(SCREEN)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
+                print("hello")
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE:
+                    user_text = user_text[0:-1]
+                elif event.key == pygame.K_RETURN:
+                    connectToTheServer(user_text)
+                    play()
+                else:
+                    user_text += event.unicode
+        
+        pygame.draw.rect(SCREEN,color,input_rect,2)
+        text_surface = font.render(user_text,True,WHITE)
+        SCREEN.blit(text_surface,(input_rect.x + 5,input_rect.y + 6))
 
         pygame.display.update()
 
