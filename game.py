@@ -75,11 +75,15 @@ def draw_board(board):
     pygame.display.update()
  
 def connectToTheServer(server_ip):
-    port=12345
-    mysocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    mysocket.connect((server_ip,port))
-    print("connection established")
-    return(mysocket)
+    try:
+        port=12345
+        mysocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        mysocket.connect((server_ip,port))
+        print("connection established")
+        return(mysocket)
+    except:
+        print("nonvalid ip address")
+        return False
     
 def isValid(server_ip):
     try:
@@ -277,9 +281,8 @@ def joinGame():
                 if event.key == pygame.K_BACKSPACE:
                     user_text = user_text[0:-1]
                 elif event.key == pygame.K_RETURN:
-                    if(isValid(user_text)):
-                        c = connectToTheServer(user_text)
-                        print(c)
+                    c = connectToTheServer(user_text)
+                    if(c):
                         play(c,1)
                     else:
                         message = "Wrong ip address please try again"
