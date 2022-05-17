@@ -137,10 +137,10 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
+                            pygame.time.wait(3000)
+                            main_menu()
 
-                if game_over:
-                    pygame.time.wait(3000)
-                    main_menu()
+
                 if(turn==1):
                     coordinate = gameSocket.recv(8192).decode()
                     coordinate = coordinate.partition("-")
@@ -155,6 +155,7 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
+                            pygame.time.wait(3000)
                             main_menu()
                 
                 
@@ -177,6 +178,7 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
+                            pygame.time.wait(3000)
                             main_menu()
                 if(turn==1):
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -199,6 +201,7 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
+                            pygame.time.wait(3000)
                             main_menu()
 
         clock.tick(60)
