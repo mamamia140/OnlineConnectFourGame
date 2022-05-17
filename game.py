@@ -156,9 +156,12 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
-                            pygame.time.wait(3000)
-                            gameSocket.close()
-                            main_menu()
+                    
+                if game_over:
+                    pygame.time.wait(3000)
+                    gameSocket.close()
+                    break  
+                            
 
 
                 if(turn==1):
@@ -175,9 +178,10 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
-                            pygame.time.wait(3000)
-                            gameSocket.close()
-                            main_menu()
+                if game_over:
+                        pygame.time.wait(3000)
+                        gameSocket.close()
+                        break           
                 
                 
                 
@@ -199,9 +203,11 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
-                            pygame.time.wait(3000)
-                            gameSocket.close()
-                            main_menu()
+
+                if game_over:
+                        pygame.time.wait(3000)
+                        gameSocket.close()
+                        break 
                 if(turn==1):
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         posx = event.pos[0]
@@ -223,11 +229,16 @@ def play(gameSocket, playerNo):
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             pygame.display.update()
-                            pygame.time.wait(3000)
-                            gameSocket.close()
-                            main_menu()
+
+                if game_over:
+                        pygame.time.wait(3000)
+                        gameSocket.close()
+                        break 
 
         clock.tick(60)
+    
+    main_menu()
+    
 def createGame():
     s = socket.socket()        
     print ("Socket successfully created")
