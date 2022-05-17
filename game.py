@@ -146,6 +146,10 @@ def play(gameSocket, playerNo):
                     pygame.display.update()
                     turn += 1
                     turn = turn % 2
+                    if winning_move(board, 2):
+                            label = myfont.render("Player 2 wins!!", 1, YELLOW)
+                            SCREEN.blit(label, (40,10))
+                            game_over = True
                 
                 
                 
@@ -162,11 +166,15 @@ def play(gameSocket, playerNo):
                     pygame.display.update()
                     turn += 1
                     turn = turn % 2
+                    if winning_move(board, 1):
+                            label = myfont.render("Player 1 wins!!", 1, RED)
+                            SCREEN.blit(label, (40,10))
+                            game_over = True
                 if(turn==1):
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         posx = event.pos[0]
                         col = int(math.floor(posx/SQUARESIZE))
-    
+
                         if is_valid_location(board, col):
                             row = get_next_open_row(board, col)
                             drop_piece(board, row, col, 2)
@@ -177,14 +185,13 @@ def play(gameSocket, playerNo):
                             turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
                             gameSocket.send(coordinate.encode())
-    
+
                         if winning_move(board, 2):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
-                            
-            print_board(board)
-            draw_board(board)
+
+
             if game_over:
                 pygame.time.wait(3000)
         clock.tick(60)
