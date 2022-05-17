@@ -189,7 +189,9 @@ def play(gameSocket, playerNo):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
-
+                            
+                print_board(board)
+                draw_board(board)
                 if game_over:
                     pygame.time.wait(3000)
         clock.tick(60)
