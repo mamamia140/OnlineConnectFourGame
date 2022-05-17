@@ -115,14 +115,12 @@ def play(gameSocket, playerNo):
             if event.type == pygame.QUIT:
                 sys.exit()
     
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                #print(event.pos)
-                # Ask for Player 1 Input
-                if playerNo == 0:
-                    if(turn==0):
+            if playerNo == 0:
+                if(turn==0):
+                    if event.type == pygame.MOUSEBUTTONDOWN:
                         posx = event.pos[0]
                         col = int(math.floor(posx/SQUARESIZE))
-    
+
                         if is_valid_location(board, col):
                             row = get_next_open_row(board, col)
                             drop_piece(board, row, col, 1)
@@ -134,42 +132,38 @@ def play(gameSocket, playerNo):
                             coordinate = str(row) +'-'+ str(col)
                             gameSocket.send(coordinate.encode())
 
-    
                         if winning_move(board, 1):
                             label = myfont.render("Player 1 wins!!", 1, RED)
                             SCREEN.blit(label, (40,10))
                             game_over = True
-                    
-                    if(turn==1):
-                        coordinate = gameSocket.recv(8192).decode()
-                        coordinate = coordinate.partition("-")
-                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 2)
-                        print_board(board)
-                        draw_board(board)
-                        pygame.display.update()
-                        turn += 1
-                        turn = turn % 2
-                    
+
+                if(turn==1):
+                    coordinate = gameSocket.recv(8192).decode()
+                    coordinate = coordinate.partition("-")
+                    drop_piece(board, int(coordinate[0]), int(coordinate[2]), 2)
+                    print_board(board)
+                    draw_board(board)
+                    pygame.display.update()
+                    turn += 1
+                    turn = turn % 2
+                
+                
+                
 
 
-                    
-                    
-
-    
-    
-                # # Ask for Player 2 Input
-                else:
-                    if(turn==0):
-                        coordinate = gameSocket.recv(8192).decode()
-                        coordinate = coordinate.partition("-")
-                        drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
-                        print_board(board)
-                        draw_board(board)
-                        pygame.display.update()
-                        turn += 1
-                        turn = turn % 2
-                    if(turn==1):
-
+            # # Ask for Player 2 Input
+            else:
+                if(turn==0):
+                    coordinate = gameSocket.recv(8192).decode()
+                    coordinate = coordinate.partition("-")
+                    drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
+                    print_board(board)
+                    draw_board(board)
+                    pygame.display.update()
+                    turn += 1
+                    turn = turn % 2
+                if(turn==1):
+                    if event.type == pygame.MOUSEBUTTONDOWN:
                         posx = event.pos[0]
                         col = int(math.floor(posx/SQUARESIZE))
     
@@ -183,17 +177,16 @@ def play(gameSocket, playerNo):
                             turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
                             gameSocket.send(coordinate.encode())
-
     
                         if winning_move(board, 2):
                             label = myfont.render("Player 2 wins!!", 1, YELLOW)
                             SCREEN.blit(label, (40,10))
                             game_over = True
                             
-                print_board(board)
-                draw_board(board)
-                if game_over:
-                    pygame.time.wait(3000)
+            print_board(board)
+            draw_board(board)
+            if game_over:
+                pygame.time.wait(3000)
         clock.tick(60)
 def createGame():
     s = socket.socket()        
