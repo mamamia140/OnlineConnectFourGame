@@ -128,6 +128,7 @@ def play(gameSocket, playerNo):
                             drop_piece(board, row, col, 1)
                             print_board(board)
                             draw_board(board)
+                            pygame.display.update()
                             turn += 1
                             turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
@@ -145,6 +146,7 @@ def play(gameSocket, playerNo):
                         drop_piece(board, int(coordinate[0]), int(coordinate[2]), 2)
                         print_board(board)
                         draw_board(board)
+                        pygame.display.update()
                         turn += 1
                         turn = turn % 2
                     
@@ -163,6 +165,7 @@ def play(gameSocket, playerNo):
                         drop_piece(board, int(coordinate[0]), int(coordinate[2]), 1)
                         print_board(board)
                         draw_board(board)
+                        pygame.display.update()
                         turn += 1
                         turn = turn % 2
                     if(turn==1):
@@ -175,6 +178,7 @@ def play(gameSocket, playerNo):
                             drop_piece(board, row, col, 2)
                             print_board(board)
                             draw_board(board)
+                            pygame.display.update()
                             turn += 1
                             turn = turn % 2
                             coordinate = str(row) +'-'+ str(col)
