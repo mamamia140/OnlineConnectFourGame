@@ -1,10 +1,20 @@
-from base64 import decode
+
 import numpy as np
 import pygame
 import sys
 import math
 from button import Button
 import socket
+import os
+
+def resource_path(relative_path):
+    try:
+    # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
  
 BLUE = (0,0,255)
 BLACK = (0,0,0)
@@ -317,11 +327,11 @@ def main_menu():
         MENU_TEXT = pygame.font.SysFont(None, 100).render("Connect-Four", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(350, 100))
 
-        CREATE_BUTTON = Button(image=pygame.image.load("res/Rect.png"), pos=(350, 250), 
+        CREATE_BUTTON = Button(image=pygame.image.load(resource_path("res/Rect.png")), pos=(350, 250), 
                             text_input="Create Game", font=pygame.font.SysFont(None, 75), base_color="#d7fcd4", hovering_color="White")
-        JOIN_BUTTON = Button(image=pygame.image.load("res/Rect.png"), pos=(350, 400), 
+        JOIN_BUTTON = Button(image=pygame.image.load(resource_path("res/Rect.png")), pos=(350, 400), 
                             text_input="Join Game", font=pygame.font.SysFont(None, 75), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("res/Rect.png"), pos=(350, 550), 
+        QUIT_BUTTON = Button(image=pygame.image.load(resource_path("res/Rect.png")), pos=(350, 550), 
                             text_input="Quit", font=pygame.font.SysFont(None, 75), base_color="#d7fcd4", hovering_color="White")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
